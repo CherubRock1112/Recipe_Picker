@@ -132,7 +132,7 @@
             // label_ingr
             // 
             this.label_ingr.AutoSize = true;
-            this.label_ingr.Location = new System.Drawing.Point(118, 227);
+            this.label_ingr.Location = new System.Drawing.Point(118, 223);
             this.label_ingr.Name = "label_ingr";
             this.label_ingr.Size = new System.Drawing.Size(119, 28);
             this.label_ingr.TabIndex = 22;
@@ -144,11 +144,12 @@
             this.tb_ingr.AcceptsReturn = true;
             this.tb_ingr.BackColor = System.Drawing.Color.WhiteSmoke;
             this.tb_ingr.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.tb_ingr.Location = new System.Drawing.Point(55, 258);
+            this.tb_ingr.Location = new System.Drawing.Point(58, 254);
             this.tb_ingr.Multiline = true;
             this.tb_ingr.Name = "tb_ingr";
+            this.tb_ingr.ReadOnly = true;
             this.tb_ingr.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
-            this.tb_ingr.Size = new System.Drawing.Size(242, 150);
+            this.tb_ingr.Size = new System.Drawing.Size(238, 174);
             this.tb_ingr.TabIndex = 13;
             this.tb_ingr.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -158,6 +159,7 @@
             this.tb_date.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.tb_date.Location = new System.Drawing.Point(54, 179);
             this.tb_date.Name = "tb_date";
+            this.tb_date.ReadOnly = true;
             this.tb_date.Size = new System.Drawing.Size(242, 32);
             this.tb_date.TabIndex = 13;
             this.tb_date.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -174,10 +176,12 @@
             // tb_chosen_rec
             // 
             this.tb_chosen_rec.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.tb_chosen_rec.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.tb_chosen_rec.Location = new System.Drawing.Point(51, 81);
+            this.tb_chosen_rec.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.tb_chosen_rec.Location = new System.Drawing.Point(55, 72);
+            this.tb_chosen_rec.Multiline = true;
             this.tb_chosen_rec.Name = "tb_chosen_rec";
-            this.tb_chosen_rec.Size = new System.Drawing.Size(242, 34);
+            this.tb_chosen_rec.ReadOnly = true;
+            this.tb_chosen_rec.Size = new System.Drawing.Size(242, 55);
             this.tb_chosen_rec.TabIndex = 13;
             this.tb_chosen_rec.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 

@@ -15,12 +15,15 @@ namespace Recipe
 {
     public partial class Form2 : Form
     {
-        SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;Initial Catalog=C:\USERS\RBOUI\SOURCE\REPOS\RECIPE\RECIPE\DATABASE1.MDF;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
-
+        //SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;Initial Catalog=C:\USERS\RBOUI\SOURCE\REPOS\RECIPE\RECIPE\DATABASE1.MDF;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+        SqlConnection con = new SqlConnection();
+        Form1 form1;
         List<TreeNode> checkedNodes = new List<TreeNode>();
-        public Form2()
+        public Form2(Form1 form, String conString)
         {
             InitializeComponent();
+            form1 = form;
+            con.ConnectionString = conString;
             try
             {
                 update_ingredient_type_list();
@@ -263,6 +266,7 @@ namespace Recipe
                 add_ingredient(ingr_name, ingr_type);
                 update_ingredient_list();
                 display_message_label(label_ingr, Color.Green, "Ingredient ajouté !");
+                ingr_name_input.Text = "";
             }
             catch (Exception ex)
             {
@@ -280,6 +284,7 @@ namespace Recipe
                 add_ingredient_type(ingr_type);
                 update_ingredient_type_list();
                 display_message_label(label_type, Color.Green, "Type d'Ingrédient ajouté !");
+                ingr_type_name_input.Text = "";
             }
             catch (Exception ex)
             {
@@ -300,6 +305,8 @@ namespace Recipe
                 add_ingr_to_rec(rec_name, clb_other);
                 display_message_label(label_rec, Color.Green, "Recette ajouté !");
                 update_recipe_list();
+                update_ingredient_list(); //Pour enlever les sélections
+                rec_name_input.Text = "";
             }
             catch (Exception ex)
             {
@@ -359,6 +366,7 @@ namespace Recipe
 
         private void but_leave_Click(object sender, EventArgs e)
         {
+            form1.update_treeview_ingredient();
             this.Close();
         }
 
@@ -367,6 +375,45 @@ namespace Recipe
             if (e.Node.Nodes.Count > 0)
                 for (int i = 0; i < e.Node.Nodes.Count; i++)
                     e.Node.Nodes[i].Checked = e.Node.Checked;
+        }
+
+
+        private void ingr_name_input_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                try
+                {
+                    String ingr_type = (String)ingr_type_input.SelectedItem;
+                    String ingr_name = ingr_name_input.Text;
+                    reset_label();
+                    add_ingredient(ingr_name, ingr_type);
+                    update_ingredient_list();
+                    display_message_label(label_ingr, Color.Green, "Ingredient ajouté !");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString());
+                    con.Close();
+                }
+            }
+        }
+
+        private void ingr_type_name_input_KeyDown(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                String ingr_type = ingr_type_name_input.Text;
+                reset_label();
+                add_ingredient_type(ingr_type);
+                update_ingredient_type_list();
+                display_message_label(label_type, Color.Green, "Type d'Ingrédient ajouté !");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+                con.Close();
+            }
         }
     }
 }

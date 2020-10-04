@@ -1,0 +1,6 @@
+CREATE TABLE [dbo].[Recipe] ( [name]      NCHAR (100) NOT NULL, [last_made] DATETIME    NOT NULL, PRIMARY KEY CLUSTERED ([name] ASC));
+CREATE TABLE[dbo].[Ingredient]( [name] NCHAR(100) NOT NULL, [type] NCHAR(10)  NULL, PRIMARY KEY CLUSTERED([name] ASC));
+CREATE TABLE [dbo].[Ingredient_Type] ( [name] NVARCHAR (100) NOT NULL, PRIMARY KEY CLUSTERED ([name] ASC));
+CREATE TABLE [dbo].[Liaison] ( [name_recipe]     NCHAR (100) NOT NULL, [name_ingredient] NCHAR (100) NOT NULL, CONSTRAINT [FK_Ingr] FOREIGN KEY ([name_ingredient]) REFERENCES [dbo].[Ingredient] ([name]), CONSTRAINT [FK_Recipe] FOREIGN KEY ([name_recipe]) REFERENCES [dbo].[Recipe] ([name]));
+
+

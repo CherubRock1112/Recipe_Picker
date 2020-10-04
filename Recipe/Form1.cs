@@ -1,25 +1,49 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
-using System.Collections;
-using System.Data.SqlTypes;
+using System.IO;
 
 namespace Recipe
 {
     public partial class Form1 : Form
     {
-        SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;Initial Catalog=C:\USERS\RBOUI\SOURCE\REPOS\RECIPE\RECIPE\DATABASE1.MDF;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
-        List<TreeNode> checkedNodes = new List<TreeNode>();
+        //SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;Initial Catalog=C:\USERS\RBOUI\SOURCE\REPOS\RECIPE\RECIPE\DATABASE1.MDF;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+        SqlConnection con = new SqlConnection();
+        List <TreeNode> checkedNodes = new List<TreeNode>();
         public Form1()
         {
             InitializeComponent();
+
+            int temp = createDatabase();
+            if (temp == 1)
+            {
+                con.ConnectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;Initial Catalog=dbo;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+                if (!createTables())
+                {
+                    //this.Close();
+                    Application.Exit();
+                }
+                if (!populateTables())
+                {
+                    //this.Close();
+                    Application.Exit();
+                }
+                MessageBox.Show("La base de données à été intialisé avec succès !");
+            }
+            else if (temp == 0)
+            {
+                //this.Close();
+                Application.Exit();
+            }
+            else
+            {
+                MessageBox.Show("Récupération de la base de donnée déjà existante !");
+                con.ConnectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;Initial Catalog=dbo;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+            }
+
+
             try
             {
                 update_treeview_ingredient();
@@ -31,74 +55,6 @@ namespace Recipe
                 con.Close();
             }
         }
-
-
-
-        /*
-        private void but_give_rec_Click(object sender, EventArgs e)
-        {
-            DateTime min_date, max_date, recipe_date;
-            TimeSpan ts;
-            String recipe_name = "";
-            Random rand = new Random();
-            int n_recipe = 0, index = 0, min_throw = 0, throw_100 = 0;
-            float factor = 0f;
-            SqlDataReader reader;
-            SqlCommand sc;
-            DataTable data = new DataTable();
-            con.Open();
-            sc = new SqlCommand("", con);
-            try
-            {
-                sc.CommandText = "SELECT COUNT(*) FROM dbo.Recipe"; //Nombre de recettes
-                reader = sc.ExecuteReader();
-                reader.Read();
-                n_recipe = (int)reader[0];
-                reader.Close();
-
-                sc.CommandText = "SELECT MAX(last_made) FROM dbo.Recipe"; //Date la plus récente
-                reader = sc.ExecuteReader();
-                reader.Read();
-                max_date = ((DateTime)reader[0]).Date;
-                reader.Close();
-
-                sc.CommandText = "SELECT MIN(last_made) FROM dbo.Recipe"; //Date la plus ancienne
-                reader = sc.ExecuteReader();
-                reader.Read();
-                min_date = ((DateTime)reader[0]).Date;
-                reader.Close();
-
-
-                sc.CommandText = "SELECT name, last_made FROM dbo.Recipe"; //Récupère les recettes, et peuple une DataTable avec les données
-                data.Load(sc.ExecuteReader());
-                con.Close();
-
-                ts = max_date - min_date; //Ecart entre date plus recente et plus ancienne
-                while (throw_100 <= min_throw)
-                {
-                    DataTableReader tableReader = data.CreateDataReader(); //Crée itérateur de la table à chaque passage dans le while
-                    index = rand.Next(n_recipe); //Index de la recette à récupérer
-                    for (int i = 0; i <= index; i++) // Récupère la index-ième recette
-                        tableReader.Read();
-                    recipe_name = (String)tableReader[0];
-                    recipe_date = ((DateTime)tableReader[1]).Date;
-                    tableReader.Close();
-                    float temp = (recipe_date - min_date).Days;
-                    factor = temp / (float)ts.Days; //Récupère un pourcentage de l'ancienneté de la recette par rapport à la plus ancienne (ancienneté -> dernière fois qu'elle a été faite)
-                    min_throw = (int)(factor * 100); //Plus le facteur est proche de 0, plus la recette est ancienne, plus le jet minimum à faire pour qu'elle soit choisie sera petit
-                    throw_100 = rand.Next(100);
-                    MessageBox.Show(String.Format("{0}, {1}\nts = {2}, factor = {3}, min_throw = {4}, throw = {5}", recipe_name, recipe_date.ToString(), ts.Days.ToString(), factor.ToString(), min_throw.ToString(), throw_100.ToString()));
-                }
-                display_message_label(label_chosen_rec, Color.Green, recipe_name);
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-                con.Close();
-            }
-}*/
-
 
         private void but_give_rec_2_Click(object sender, EventArgs e)
         {
@@ -194,7 +150,6 @@ namespace Recipe
         }
 
         
-
         private void get_checked_node(TreeNodeCollection nodes)
         {
             foreach (TreeNode node in nodes)
@@ -206,9 +161,6 @@ namespace Recipe
                 else
                     get_checked_node(node.Nodes);
         }
-
-
-
 
 
         private void execute_cmd_nq(String cmd)
@@ -228,9 +180,26 @@ namespace Recipe
             }
         }
 
+        private void execute_cmd_nq(SqlConnection connection, String cmd)
+        {
+            try
+            {
+                SqlCommand sc;
+                connection.Open();
+                sc = new SqlCommand(cmd, connection);
+                sc.ExecuteNonQuery();
+                sc.Dispose();
+                connection.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(cmd + " : " + ex.ToString());
+                connection.Close();
+            }
+        }
 
 
-        private void update_treeview_ingredient()
+        public void update_treeview_ingredient()
         {
             con.Open();
             SqlCommand sc = new SqlCommand("", con);
@@ -272,9 +241,12 @@ namespace Recipe
 
         private void display_recipe(String name, DateTime date)
         {
+            bool pair = true;
             show_recipe();
-            tb_chosen_rec.Text = name;
-            tb_date.Text = date.Date.ToString();
+            tb_chosen_rec.Text = name.Substring(0, name.IndexOf("  "));
+            tb_ingr.Text = "";
+            tb_date.Text = date.Date.ToLongDateString();
+            String temp;
 
             String query = "SELECT name_ingredient FROM dbo.Liaison WHERE name_recipe IN ('" + name + "')";
             con.Open();
@@ -283,7 +255,13 @@ namespace Recipe
             List<String> types = new List<String>();
             while (reader.Read())
             {
-                tb_ingr.Text += (String)reader[0] + "\r";
+                temp = (String)reader[0];
+                temp = temp.Substring(0, temp.IndexOf(' '));
+                if (pair)
+                    tb_ingr.Text += temp + "\r\n";
+                else
+                    tb_ingr.Text += temp + "  ";
+                //pair = (pair == true ? false : true);
             }
             con.Close();
         }
@@ -327,8 +305,99 @@ namespace Recipe
 
         private void but_add_rec_Click(object sender, EventArgs e)
         {
-            Form2 form2 = new Form2();
+            Form2 form2 = new Form2(this, con.ConnectionString);
             form2.Show();
         }
+
+
+        private int createDatabase()
+        {
+            String str = "CREATE DATABASE dbo";
+            SqlConnection myConn = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False;;database=master");
+            try
+            {
+                SqlCommand sc;
+                myConn.Open();
+                sc = new SqlCommand(str, myConn);
+                sc.ExecuteNonQuery();
+                sc.Dispose();
+                myConn.Close();
+            }
+            catch (SqlException sqlex)
+            {
+                if (sqlex.Number == 1801)
+                {
+                    //MessageBox.Show("database already exists !");
+                    return 2;
+                }
+                else
+                {
+                    MessageBox.Show("Erreur pendant la création de la base de donnée !\n" + sqlex.ToString());
+                    myConn.Close();
+                    return 0;
+                }
+            }
+            return 1;
+        }
+
+        private bool createTables()
+        {
+            string path = @"c:\prog\tables.txt";
+            string query = "";
+            //String str;
+            SqlConnection myConn = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;Initial Catalog=dbo;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+
+            try
+            {
+                if (File.Exists(path))
+                {
+                    using (StreamReader sr = File.OpenText(path))
+                    {
+                        string s;
+                        while ((s = sr.ReadLine()) != null)
+                        {
+                            query += s;
+                        }
+                    }
+                    execute_cmd_nq(query);
+                }
+
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show("Erreur pendant la création des tables  de donnée !\n" + ex.ToString());
+                myConn.Close();
+                return false;
+            }
+            return true;
+        }
+
+        private bool populateTables()
+        {
+            string path = @"c:\prog\data.txt";
+            string query = "";
+            try
+            {
+                if (File.Exists(path))
+                {
+                    using (StreamReader sr = File.OpenText(path))
+                    {
+                        string s;
+                        while ((s = sr.ReadLine()) != null)
+                        {
+                            query += s;
+                        }
+                    }
+                    execute_cmd_nq(query);
+                }
+            }catch(Exception ex)
+            {
+                MessageBox.Show("Erreur pendant la population des tables de donnée !\n" + ex.ToString());
+                return false;
+            }
+
+            return true;
+        }
+
     }
 }

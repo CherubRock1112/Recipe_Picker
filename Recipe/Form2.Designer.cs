@@ -77,7 +77,7 @@
             // 
             this.label_rec.AutoSize = true;
             this.label_rec.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label_rec.Location = new System.Drawing.Point(39, 126);
+            this.label_rec.Location = new System.Drawing.Point(39, 145);
             this.label_rec.Name = "label_rec";
             this.label_rec.Size = new System.Drawing.Size(53, 25);
             this.label_rec.TabIndex = 10;
@@ -107,7 +107,7 @@
             this.but_add_ingr_type.TabIndex = 1;
             this.but_add_ingr_type.Text = "Ajouter";
             this.but_add_ingr_type.UseVisualStyleBackColor = false;
-            this.but_add_ingr_type.Click += new System.EventHandler(this.add_ingr_Click);
+            this.but_add_ingr_type.Click += new System.EventHandler(this.add_ingr_type_Click);
             // 
             // ingr_type_name_input
             // 
@@ -117,6 +117,7 @@
             this.ingr_type_name_input.Name = "ingr_type_name_input";
             this.ingr_type_name_input.Size = new System.Drawing.Size(203, 32);
             this.ingr_type_name_input.TabIndex = 3;
+            this.ingr_type_name_input.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ingr_type_name_input_KeyDown);
             // 
             // clb_other
             // 
@@ -125,7 +126,7 @@
             this.clb_other.FormattingEnabled = true;
             this.clb_other.Location = new System.Drawing.Point(649, 42);
             this.clb_other.Name = "clb_other";
-            this.clb_other.Size = new System.Drawing.Size(160, 112);
+            this.clb_other.Size = new System.Drawing.Size(160, 166);
             this.clb_other.TabIndex = 6;
             this.clb_other.Visible = false;
             // 
@@ -136,7 +137,7 @@
             this.clb_veg.FormattingEnabled = true;
             this.clb_veg.Location = new System.Drawing.Point(456, 42);
             this.clb_veg.Name = "clb_veg";
-            this.clb_veg.Size = new System.Drawing.Size(160, 112);
+            this.clb_veg.Size = new System.Drawing.Size(160, 166);
             this.clb_veg.TabIndex = 6;
             this.clb_veg.Visible = false;
             // 
@@ -147,7 +148,7 @@
             this.clb_meat.FormattingEnabled = true;
             this.clb_meat.Location = new System.Drawing.Point(265, 42);
             this.clb_meat.Name = "clb_meat";
-            this.clb_meat.Size = new System.Drawing.Size(160, 112);
+            this.clb_meat.Size = new System.Drawing.Size(160, 166);
             this.clb_meat.TabIndex = 6;
             this.clb_meat.Visible = false;
             // 
@@ -167,7 +168,7 @@
             // 
             this.rec_name_input.BackColor = System.Drawing.Color.WhiteSmoke;
             this.rec_name_input.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.rec_name_input.Location = new System.Drawing.Point(39, 57);
+            this.rec_name_input.Location = new System.Drawing.Point(39, 76);
             this.rec_name_input.Multiline = true;
             this.rec_name_input.Name = "rec_name_input";
             this.rec_name_input.Size = new System.Drawing.Size(201, 60);
@@ -193,6 +194,7 @@
             this.ingr_name_input.Name = "ingr_name_input";
             this.ingr_name_input.Size = new System.Drawing.Size(201, 32);
             this.ingr_name_input.TabIndex = 3;
+            this.ingr_name_input.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ingr_name_input_KeyDown);
             // 
             // ingr_type_input
             // 
@@ -223,7 +225,7 @@
             this.clb_recipe.FormattingEnabled = true;
             this.clb_recipe.Location = new System.Drawing.Point(54, 34);
             this.clb_recipe.Name = "clb_recipe";
-            this.clb_recipe.Size = new System.Drawing.Size(250, 166);
+            this.clb_recipe.Size = new System.Drawing.Size(250, 139);
             this.clb_recipe.TabIndex = 16;
             // 
             // gb_type
@@ -277,7 +279,7 @@
             this.gb_rec.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.gb_rec.Location = new System.Drawing.Point(21, 238);
             this.gb_rec.Name = "gb_rec";
-            this.gb_rec.Size = new System.Drawing.Size(982, 183);
+            this.gb_rec.Size = new System.Drawing.Size(982, 220);
             this.gb_rec.TabIndex = 22;
             this.gb_rec.TabStop = false;
             this.gb_rec.Text = "Recette";
@@ -289,7 +291,7 @@
             this.tv_ingr.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.tv_ingr.Location = new System.Drawing.Point(561, 34);
             this.tv_ingr.Name = "tv_ingr";
-            this.tv_ingr.Size = new System.Drawing.Size(225, 166);
+            this.tv_ingr.Size = new System.Drawing.Size(225, 139);
             this.tv_ingr.TabIndex = 23;
             this.tv_ingr.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.tv_ingr_AfterCheck);
             // 
@@ -300,9 +302,9 @@
             this.groupBox1.Controls.Add(this.gb_ingr);
             this.groupBox1.Controls.Add(this.gb_rec);
             this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.groupBox1.Location = new System.Drawing.Point(54, 234);
+            this.groupBox1.Location = new System.Drawing.Point(54, 203);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(1028, 437);
+            this.groupBox1.Size = new System.Drawing.Size(1028, 468);
             this.groupBox1.TabIndex = 20;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Ajouts";
@@ -349,7 +351,7 @@
             this.groupBox3.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.groupBox3.Location = new System.Drawing.Point(54, 11);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(1028, 217);
+            this.groupBox3.Size = new System.Drawing.Size(1028, 186);
             this.groupBox3.TabIndex = 24;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Suppression";
