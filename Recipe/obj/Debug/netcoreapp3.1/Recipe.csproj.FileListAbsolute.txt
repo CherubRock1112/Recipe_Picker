@@ -20,3 +20,4 @@ C:\Users\rboui\source\repos\Recipe\Recipe\obj\Debug\netcoreapp3.1\Recipe.csproj.
 C:\Users\rboui\source\repos\Recipe\Recipe\obj\Debug\netcoreapp3.1\Recipe.dll
 C:\Users\rboui\source\repos\Recipe\Recipe\obj\Debug\netcoreapp3.1\Recipe.pdb
 C:\Users\rboui\source\repos\Recipe\Recipe\obj\Debug\netcoreapp3.1\Recipe.genruntimeconfig.cache
+C:\Users\rboui\source\repos\Recipe\Recipe\obj\Debug\netcoreapp3.1\Recipe.Form2.resources
