@@ -15,7 +15,6 @@ namespace Recipe
 {
     public partial class Form2 : Form
     {
-        //SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;Initial Catalog=C:\USERS\RBOUI\SOURCE\REPOS\RECIPE\RECIPE\DATABASE1.MDF;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
         SqlConnection con = new SqlConnection();
         Form1 form1;
         List<TreeNode> checkedNodes = new List<TreeNode>();
